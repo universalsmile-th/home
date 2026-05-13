@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dental Clinic</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Prompt', sans-serif;
+}
+:root {
+  --primary: #4354a4;   /* น้ำเงินหลัก */
+  --accent: #b5813c;    /* ทอง */
+  --bg-light: #ededeb;  /* เทาอ่อน */
+  --white: #ffffff;
+  --text-dark: #1f2d3d;
+}
+body{
+  background: var(--white);
+  color: var(--text-dark);
+  overflow-x:hidden;
+}
+html{
+  scroll-behavior:smooth;
+}
+nav ul li a{
+  text-decoration:none;
+  color:var(--accent);
+}
+
+nav ul li a:hover{
+  color:var(--primary);
+}
+section{
+  scroll-margin-top:120px;
+}
+/* ===== PROMO POPUP ===== */
+
+.promo-img{
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.promo-img:hover{
+  transform:scale(1.05);
+}
+
+.popup{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  visibility:hidden;
+  transition:0.3s;
+  z-index:2000;
+}
+
+.popup img{
+  width:350px;
+  transform:scale(1.15);
+  border-radius:12px;
+  transition:0.3s;
+}
+.close{
+  position:absolute;
+  top:25px;
+  right:35px;
+  font-size:40px;
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.close:hover{
+  opacity:0.7;
+}
+
+.popup:target{
+  opacity:1;
+  visibility:visible;
+}
+.review-container{
+  overflow:hidden;
+  max-width:900px;
+  margin:auto;
+}
+.review-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+  max-width:900px;
+  margin:auto;
+}
+.review-card{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.review-card img{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  object-fit:cover;
+  margin-bottom:10px;
+}
+.stars{
+  color:#f4b400;
+  font-size:18px;
+  margin:5px 0 10px;
+}
+
+.google-rating{
+  text-align:center;
+  font-size:22px;
+  margin-top:30px;
+  color:#f4b400;
+}
+
+@keyframes slide{
+   0%{transform:translateX(0);}
+  30%{transform:translateX(0);}
+
+  35%{transform:translateX(-280px);}
+  60%{transform:translateX(-280px);}
+
+  65%{transform:translateX(-560px);}
+  90%{transform:translateX(-560px);}
+
+  100%{transform:translateX(0);}
+}
+/* ===== NAVBAR ===== */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:#ffffff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 8%;
+  box-shadow:0 4px 15px rgba(0,0,0,0.05);
+  z-index:999;
+}
+
+.logo{
+  font-weight:700;
+  font-size:20px;
+  color:var(--primary);
+}
+.logo img {
+  height: 50px;
+  width: auto;
+  display: block;
+}
+nav ul{
+  display:flex;
+  gap:25px;
+  list-style:none;
+}
+
+nav ul li{
+  cursor:pointer;
+  font-weight:500;
+}
+nav ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+nav ul li {
+  position: relative;
+  padding: 10px 0;
+  cursor: pointer;
+  color: var(--accent);
+}
+#menu-toggle{
+  display:none;
+}
+.menu-icon{
+  display:none;
+  font-size:26px;
+  cursor:pointer;
+  color:var(--primary);
+}
+.menu{
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+/* เมนูย่อย */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  list-style: none;
+  padding: 5px 0;          /* ลดช่องไฟบนล่าง */
+  min-width: 200px;        /* แคบลงนิดให้ดูแน่น */
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+
+  display: flex;
+  flex-direction: column;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: 0.2s ease;
+  z-index: 999;
+}
+
+.dropdown-menu li {
+  padding: 6px 14px;       /* ระยะกำลังพอดี */
+}
+
+.dropdown-menu li a {
+  text-decoration: none;
+  color: var(--accent);
+  font-size: 14px;
+  line-height: 1.3;
+  display: block;
+}
+/* เปลี่ยนสีตอน hover หัวข้อหลัก */
+.dropdown-menu > li:hover > a {
+  color: var(--primary);
+  background-color: white;
+  border-radius: 6px;
+}
+
+/* ตอน hover ให้แสดง */
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+/* ทำให้ dropdown แสดง */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background: white;
+  list-style: none;
+  padding: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Hover ที่ "บริการ" ให้ dropdown โผล่ */
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* ===== SUBMENU เปิดลงล่าง ===== */
+
+/* ไม่ใช้ absolute แล้ว */
+.submenu {
+  display: none;
+  position: static;   /* สำคัญมาก */
+  list-style: none;
+  padding-left: 15px; /* ขยับเข้าเล็กน้อยให้ดูเป็นลำดับ */
+}
+.has-submenu {
+  padding-bottom: 8px; /* เพิ่มพื้นที่ hover แทน */
+}
+/* Hover ที่หัวข้อย่อย ให้ submenu โผล่ลง */
+.has-submenu:hover > .submenu {
+  display: block;
+}
+.has-submenu::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  height: 10px;
+}
+/* จัดสไตล์ตัวหนังสือ */
+.submenu li {
+  padding: 6px 0;
+}
+
+.submenu li a {
+  text-decoration: none;
+  color: var(--accent);
+  white-space: normal;
+}
+.has-submenu:hover .submenu li a {
+  color: var(--primary);
+}
+.btn-appointment {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 12px 30px;
+  background-color: var(--accent);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-appointment:hover {
+  background-color: var(--text-dark); /* ปรับเป็นโทนทองเข้ม หรือสี hover ที่คุณใช้ */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.btn-line{
+  background-color:#06C755;
+}
+.btn-facebook{
+  background-color:#1877F2;
+}
+.btn-instagram{
+  background: linear-gradient(
+    45deg,
+    #f58529,
+    #feda77,
+    #dd2a7b,
+    #8134af,
+    #515bd4
+  );
+  color: white;
+}
+.contact-container {
+  display: flex;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 50px auto 0;
+  align-items: center;
+}
+
+/* ฝั่งข้อมูล */
+.contact-info {
+  flex: 1;
+}
+
+.contact-info h3 {
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+
+.contact-info p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+/* ฝั่งแผนที่ */
+.contact-map {
+  flex: 1;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.contact-map iframe {
+  width: 100%;
+  height: 400px;
+  border: 0;
+}
+/* ===== HERO SECTION ===== */
+.hero {
+  position: relative;
+  margin-top: 80px;
+  height: 90vh;
+  background: url("Images/banner1.jpg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--accent);
+  text-align: left;
+  padding: 0 10%;
+}
+
+.hero h1{
+  font-size:42px;
+  margin-bottom:20px;
+}
+
+.hero p{
+  font-size:22px;
+  opacity:0.9;
+}
+
+.article-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+margin-top:30px;
+}
+
+.article-card{
+background:white;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+transition:0.3s;
+display:flex;              /* ✅ เพิ่ม */
+flex-direction:column;     /* ✅ เพิ่ม */
+}
+
+.article-card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.article-card h3{
+padding:15px;
+font-size:18px;
+color:var(--primary);
+text-align:center;   /* ✅ เพิ่มบรรทัดนี้ */
+}
+
+.article-card p{
+padding:0 15px 15px;
+font-size:14px;
+flex-grow:1;   /* ✅ เพิ่ม */
+text-align:justify;      /* ✅ จัดเต็มบรรทัด */
+text-justify:inter-word; /* ✅ ให้เว้นคำสวยขึ้น */
+}
+
+.article-card a{
+display:block;
+width:100%; /* ✅ เพิ่ม */
+padding:12px;
+text-align:center;
+background:var(--accent);
+color:white;
+text-decoration:none;
+border-radius:0 0 20px 20px; /* ✅ เพิ่ม */
+}
+
+.article-card:hover{
+transform:translateY(-8px);
+}
+
+/* ===== SECTION STYLE ===== */
+.section{
+  padding:60px 10%;
+  background:white;
+}
+
+.section.alt{
+  background:#f0f4ff;
+}
+
+.section h2{
+  font-size:32px;
+  margin-bottom:30px;
+  color:#1e3a8a;
+}
+.about-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:30px;
+  margin-top:40px;
+}
+.about-card{
+  background:white;
+  border-radius:20px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+.about-card h3{
+  color:#b5813c;
+  margin-bottom:10px;
+}
+.about-card p{
+  line-height:1.7;
+}
+.box-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:30px;
+  max-width:750px;
+  margin:auto;
+}
+
+.box{
+  background:white;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.05);
+  overflow:hidden;   /* กันรูปทะลุกล่อง */
+}
+.box img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;   /* ดันรูปขึ้นด้านบน */
+}
+.box:hover img{
+  transform:scale(1.08);
+}
+/* ===== FOOTER ===== */
+footer{
+  background:var(--accent);
+  color:white;
+  padding:50px 10%;
+  text-align:center;
+}
+footer p {
+  margin: 5px 0;
+}
+
+/* ===== FLOATING LINE BUTTON ===== */
+.line-float{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#06C755;
+  color:white;
+  padding:15px 22px;
+  border-radius:50px;
+  font-weight:600;
+  text-decoration:none;
+  box-shadow:0 8px 25px rgba(0,0,0,0.2);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  z-index:1000;
+  transition:0.3s;
+}
+
+.line-float:hover{
+  transform:scale(1.05);
+}
+
+/* ===== TABLET STYLES ===== */
+@media(min-width:769px) and (max-width:1024px){
+  /* Tablet: 2 columns for grids */
+  .about-grid{
+    grid-template-columns: repeat(2,1fr);
+  }
+  .box-grid{
+    grid-template-columns: repeat(2,1fr);
+    max-width:1000px;
+    margin:auto;
+  }
+  .review-cards{
+    grid-template-columns: repeat(2,1fr);
+  }
+  .article-grid{
+    grid-template-columns: repeat(2,1fr);
+  }
+  .contact-container{
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .contact-map iframe{
+    height:340px;
+  }
+  /* Adjust hero for tablets */
+  .hero{
+    height:80vh;
+    padding:0 8%;
+  }
+  .hero h1{
+    font-size:32px;
+  }
+  .hero p{
+    font-size:18px;
+  }
+  nav{
+    padding:15px 6%;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+  }
+  nav ul{
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:18px;
+  }
+  .dropdown-menu{
+    min-width:220px;
+  }
+  /* Section padding */
+  .section{
+    padding:50px 8%;
+  }
+}
+@media(max-width:1024px){
+  .menu-icon{
+    display:block;
+  }
+  .menu{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    position:absolute;
+    top:70px;
+    left:0;
+    width:100%;
+    background:white;
+    gap:2px;
+    padding:10px 0;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.3s ease;
+  }
+  #menu-toggle:checked ~ .menu{
+    max-height:1200px;
+    overflow:auto;
+  }
+  nav ul{
+    flex-direction:column;
+    gap:0;
+    width:100%;
+  }
+  .menu li{
+    width:100%;
+    text-align:center;
+    margin:0;
+  }
+  .menu li a{
+    padding:10px 15px;
+    display:block;
+    width:100%;
+  }
+  .dropdown-menu{
+    display:none !important;
+    position:static;
+    box-shadow:none;
+    width:100%;
+    padding:0;
+    margin:0;
+  }
+  .dropdown-menu li{
+    width:100%;
+    padding:0;
+  }
+  .dropdown-menu li a{
+    padding:8px 15px;
+  }
+  .submenu {
+    display:none !important;
+    position:static;
+    list-style:none;
+    padding-left:18px;
+    width:100%;
+  }
+  .submenu li{
+    padding:4px 0;
+  }
+  .submenu li a{
+    padding:8px 15px;
+    font-size:14px;
+  }
+  .has-submenu::after{
+    display:none;
+  }
+}
+/* ===== MOBILE STYLES ===== */
+@media(max-width:768px){
+
+  /* ===== NAVBAR ===== */
+  nav{
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 16px;
+  }
+
+  /* แสดงปุ่ม ☰ */
+  .menu-icon{
+    display:block;
+  }
+
+  /* ซ่อนเมนูตอนแรก */
+  .menu{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    position:absolute;
+    top:70px;
+    left:0;
+    width:100%;
+    background:white;
+    gap:8px;
+    padding:12px 0;
+
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.3s ease;
+  }
+
+  /* ตอนกด ☰ ให้เมนูลงมา */
+  #menu-toggle:checked ~ .menu{
+    max-height:1200px;
+  }
+
+  .menu li{
+    width:100%;
+    text-align:center;
+  }
+
+  .menu li a{
+    padding:8px 15px;
+    display:block;
+    width:100%;
+  }
+
+  /* dropdown ในมือถือ */
+  .dropdown-menu{
+    display:none !important;
+    position:static;
+    box-shadow:none;
+    width:100%;
+    padding:0;
+  }
+
+  .dropdown-menu li{
+    width:100%;
+  }
+
+  .dropdown-menu li a{
+    padding:8px 15px;
+  }
+
+  .submenu {
+    display: none !important;
+    position: static;
+    list-style: none;
+    padding-left: 18px;
+    width:100%;
+  }
+
+  .submenu li {
+    padding: 4px 0;
+  }
+
+  .submenu li a {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+
+  .dropdown:hover .dropdown-menu{
+    display:none;
+  }
+
+  .has-submenu:hover > .submenu{
+    display:none;
+  }
+
+  .has-submenu::after{
+    display:none;
+  }
+
+  /* ทำให้กดเปิด submenu ได้ */
+  .has-submenu > a{
+    display:block;
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    height:auto;
+    padding:40px 20px;
+    text-align:left;
+    justify-content:flex-start;
+    background-position: right;
+  }
+
+  .hero h1{
+    font-size:20px;
+  }
+
+  .hero p{
+    font-size:14px;
+  }
+
+  .hero div{
+    padding:20px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  /* ===== ABOUT ===== */
+  .about-grid{
+    grid-template-columns:1fr;
+  }
+
+  /* ===== SERVICES ===== */
+  .box-grid{
+    grid-template-columns:1fr;
+  }
+
+  /* ===== REVIEW ===== */
+  .review-cards{
+    grid-template-columns:1fr;
+  }
+
+  /* ===== ARTICLES 🔥 */
+  .article-grid{
+    grid-template-columns:1fr;
+  }
+
+  /* ===== CONTACT ===== */
+  .contact-container{
+    flex-direction:column;
+  }
+
+  .contact-map iframe{
+    height:300px;
+  }
+
+  /* ===== SECTION PADDING ===== */
+  .section{
+    padding:40px 20px;
+  }
+
+  .popup img{
+    width:300px;
+    transform:scale(1);
+  }
+}
+
+</style>
+</head>
+
+<body id="top">
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">
+  <a href="#top">
+    <img src="Images/logo1.jpg" alt="Universal Smile Dental Clinic">
+  </a>
+  </div>
+  <!-- ปุ่ม ☰ -->
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="menu-icon">
+    <i class="fa fa-bars"></i>
+  </label>
+
+  <ul class="menu">
+    <li><a href="#top">หน้าแรก</a></li>
+    <li><a href="#PROMOTION">โปรโมชัน</a></li>
+    <li class="dropdown">
+      <a href="#services">บริการ</a>
+      <ul class="dropdown-menu">
+        <li><a href="#service-general">ทันตกรรมทั่วไป</a></li>
+        <li><a href="#service-orthodontics">ทันตกรรมจัดฟัน</a></li>
+        <li><a href="#service-implants">ทันตกรรมรากฟัน</a></li>
+        <li><a href="#service-restoration">ทันตกรรมบูณะ</a></li>
+        <li><a href="#service-cosmetic">ทันตกรรมเพื่อความงาม</a></li>
+        <li><a href="#service-pediatric">ทันตกรรมสำหรับเด็ก</a></li>
+      </ul>
+    </li>
+    <li><a href="#review">รีวิว</a></li>
+    <li><a href="#articles">บทความ</a></li>
+    <li><a href="#contact">ติดต่อเรา</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <h1>คลินิกทันตกรรมยูนิเวอร์ซัล สไมล์</h1>
+    <p>Where Excellence Meets Your Smile</p>
+    <a href="https://lin.ee/JNWESpz" 
+       class="btn-appointment" 
+       target="_blank">
+       นัดหมายจองคิว
+    </a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section">
+  <h2>เกี่ยวกับเรา</h2>
+
+  <div class="about-grid">
+
+    <div class="about-card">
+      <h3>ทีมทันตแพทย์ผู้เชี่ยวชาญ</h3>
+      <p>ดูแลโดยทันตแพทย์ที่มีประสบการณ์</p>
+      <p>พร้อมให้คำปรึกษาและวางแผนการรักษาอย่างใส่ใจ</p>
+    </div>
+
+    <div class="about-card">
+      <h3>เทคโนโลยีทันตกรรมมาตรฐานสากล</h3>
+      <p>ใช้เครื่องมือและเทคโนโลยีทันตกรรมที่ทันสมัย</p>
+      <p>เพื่อความแม่นยำ ปลอดภัย และมีประสิทธิภาพ</p>
+    </div>
+
+    <div class="about-card">
+      <h3>คลินิกทันตกรรมครบวงจร</h3>
+      <p>ครอบคลุมการดูแลสุขภาพช่องปากทุกด้าน</p>
+      <p>เพื่อให้มีรอยยิ้มที่สวยงามและสุขภาพฟันที่ดี</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="section alt">
+  <h2>บริการของเรา</h2>
+  <div class="box-grid">
+    <div id="service-general" class="box">
+      <img src="Categories/01-ทันตกรรมทั่วไป/1-ทันตกรรมทั่วไป.jpg" alt="ทันตกรรมทั่วไป">
+    </div>
+    <div id="service-orthodontics" class="box">
+      <img src="Categories/02_จัดฟัน/2.จัดฟัน.jpg" alt="ทันตกรรมจัดฟัน">
+    </div>
+    <div id="service-implants" class="box">
+      <img src="Categories/03_รากเทียม/3.รากเทียม.jpg" alt="ทันตกรรมรากเทียม">
+    </div>
+    <div id="service-restoration" class="box">
+      <img src="Categories/04_ทันตกรรมประดิษฐ์/4.ทันตกรรมประดิษฐิ์.jpg" alt="ทันตกรรมประดิษฐ์">
+    </div>
+    <div id="service-cosmetic" class="box">
+      <img src="Categories/05_ทันตกรรมเพื่อความงาม/5.ทันตกรรมเพื่อความสวยงาม.jpg" alt="ทันตกรรมเพื่อความงาม">
+    </div>
+    <div id="service-pediatric" class="box">
+      <img src="Categories/06_ทันตกรรมสำหรับเด็ก/6.ทันตกรรมสำหรับเด็ก.jpg" alt="ทันตกรรมสำหรับเด็ก">
+    </div>
+  </div>
+</section>
+
+<!-- PROMOTION -->
+<section id="PROMOTION" class="section">
+  <h2>โปรโมชัน</h2>
+  <div class="box-grid">
+  <div class="box">
+    <a href="#promo1">
+      <img class="promo-img" src="promotions/promotion4.jpg">
+    </a>
+  </div>
+  <div class="box">
+    <a href="#promo2">
+      <img class="promo-img" src="promotions/promotion5.jpg">
+    </a>
+  </div>
+  <div class="box">
+    <a href="#promo3">
+      <img class="promo-img" src="promotions/promotion6.jpg">
+    </a>
+  </div>
+  </div>
+</section>
+
+<!-- REVIEW -->
+<section id="review" class="section alt">
+  <h2>รีวิว</h2>
+  <div class="review-slider">
+    <div class="review-cards">
+
+      <div class="review-card">
+        <img src="Review/Review Format.png">
+        <h4>คุณเมย์</h4>
+        <div class="stars">★★★★★</div>
+        <p>คุณหมอมือเบามาก คลินิกสะอาด บริการดีมากค่ะ</p>
+      </div>
+
+      <div class="review-card">
+        <img src="Review/Review Format.png">
+        <h4>คุณต้น</h4>
+        <div class="stars">★★★★★</div>
+        <p>ราคาสมเหตุสมผล ให้คำแนะนำดีมาก</p>
+      </div>
+
+      <div class="review-card">
+        <img src="Review/Review Format.png">
+        <h4>คุณแนน</h4>
+        <div class="stars">★★★★★</div>
+        <p>ประทับใจมาก คุณหมอใจดี คลินิกสะอาด</p>
+      </div>
+
+      <div class="review-card">
+        <img src="Review/Review Format.png">
+        <h4>คุณเบนซ์</h4>
+        <div class="stars">★★★★★</div>
+        <p>ปักรามเทียมไม่เจ็บอย่างที่คิดเลยครับ</p>
+      </div>
+    </div>
+  </div>
+  <div class="google-rating">
+    ⭐⭐⭐⭐⭐ 5.0 บน Google Reviews
+  </div>
+  <div style="text-align:center;margin-top:25px;">
+    <a href="https://share.google/j7oYGeZ4mxz2w0IfZ"
+       target="_blank"
+       class="btn-appointment">
+       รีวิวเพิ่มเติม
+    </a>
+  </div>
+
+</section>
+
+<!-- ARTICLES -->
+
+<section id="articles" class="section">
+  <h2>บทความ</h2>
+
+  <div class="article-grid">
+
+<div class="article-card">
+  <img src="article/01-article.jpg" alt="">
+  <h3>ทำไมทันตแพทย์แนะนำ "ขูดหินปูน" ทุก 6 เดือน</h3>
+  <p>
+    แม้จะแปรงฟันทุกวัน แต่หินปูนก็ยังสะสมได้โดยไม่รู้ตัว 
+    และอาจเป็นสาเหตุสำคัญที่อาจนำไปสู่ปัญหาใหญ่ในช่องปาก
+  </p>
+  <a href="#">อ่านต่อ</a>
+</div>
+
+<div class="article-card">
+  <img src="article/02-article.jpg" alt="">
+  <h3>รากฟันเทียม ทางเลือกความมั่นใจ</h3>
+  <p>
+    การสูญเสียฟันอาจส่งผลต่อการใช้ชีวิตและความมั่นใจ 
+    "รากฟันเทียม" จึงเป็นหนึ่งในทางเลือกที่ช่วยคืนรอยยิ้ม 
+    พร้อมช่วยให้สามารถใช้งานได้ใกล้เคียงธรรมชาติมากที่สุด
+  </p>
+  <a href="#">อ่านต่อ</a>
+</div>
+
+<div class="article-card">
+  <img src="article/03-article.jpg" alt="">
+  <h3>ฟอกสีฟัน อันตรายไหม?</h3>
+  <p>
+    ฟันขาวใสอาจช่วยเพิ่มความมั่นใจได้มากขึ้น และเมื่ออยู่ภายใต้การดูแลของทันตแพทย์ผู้เชี่ยวชาญแล้วนั้น ย่อมได้ผลลัพธ์ที่ปลอดภัยอย่างแน่นอน </p>
+  <a href="#">อ่านต่อ</a>
+</div>
+
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact" class="section alt">
+  <h2>ติดต่อเรา</h2>
+
+  <div class="contact-container">
+
+    <!-- ซ้าย: ข้อมูลร้าน -->
+    <div class="contact-info">
+      <h3>คลินิกทันตกรรมยูนิเวอร์ซัล สไมล์ สาขาพระราม 4</h3>
+      <p><strong>ที่อยู่:</strong> โลตัสพระราม 4 ชั้น 2 คลองตัน คลองเตย กรุงเทพฯ 10110</p>
+      <p><strong>โทร:</strong> 082-893-9997</p>
+      <p><strong>เวลาทำการ:</strong> ทุกวัน 10:00 - 20:00 น.</p>
+
+      <a href="https://lin.ee/JNWESpz" 
+         target="_blank" 
+         class="btn-appointment btn-line">
+          <i class="fa-brands fa-line"></i> LINE
+      </a>
+      <a href="https://www.facebook.com/share/1KXBKwSBBB/?mibextid=wwXIfr" 
+         target="_blank" 
+         class="btn-appointment btn-facebook">
+         <i class="fa-brands fa-facebook-f"></i> Facebook
+      </a>
+      <a href="https://www.instagram.com/universalsmile.th?igsh=bjh3N2QybjQ1azl5" 
+         target="_blank" 
+         class="btn-appointment btn-instagram">
+        <i class="fa-brands fa-instagram"></i> Instagram
+      </a>
+    </div>
+
+    <!-- ขวา: แผนที่ -->
+    <div class="contact-map">
+      <iframe 
+        src="https://maps.google.com/maps?q=lotus+rama+4+bangkok&t=&z=15&ie=UTF8&iwloc=&output=embed"
+        width="100%" 
+        height="400" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy">
+      </iframe>
+    </div>
+
+  </div>
+</section>
+<!-- PROMO POPUP -->
+
+<div id="promo1" class="popup">
+  <a href="#PROMOTION" class="close">&times;</a>
+    <img src="promotions/promotion4.jpg">
+</div>
+
+<div id="promo2" class="popup">
+  <a href="#PROMOTION" class="close">&times;</a>
+    <img src="promotions/promotion5.jpg">
+</div>
+
+<div id="promo3" class="popup">
+  <a href="#PROMOTION" class="close">&times;</a>
+    <img src="promotions/promotion6.jpg">
+</div>
+<footer>
+  <p>คลินิกทันตกรรมยูนิเวอร์ซัล สไมล์ สาขาพระราม 4</p>
+  <p>โทร: 082-893-9997</p>
+  <p>Line: @usdental</p>
+</footer>
+
+<!-- FLOATING LINE BUTTON -->
+<a href="https://lin.ee/JNWESpz" target="_blank" class="line-float">
+  💬 นัดหมาย
+</a>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        if (menuToggle.checked) {
+          menuToggle.checked = false;
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
